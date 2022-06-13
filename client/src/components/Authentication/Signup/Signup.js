@@ -20,9 +20,16 @@ export default function Signup() {
         email: email,
         password: password,
       }),
-    });
-    alert("Signup Successful");
-    navigate("/");
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data == "User already exists with this email") {
+          alert(data);
+        } else {
+          alert("User created successfully");
+          navigate("/");
+        }
+      });
   };
   return (
     <div className="login__body">
