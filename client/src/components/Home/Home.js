@@ -4,9 +4,10 @@ import { store } from "../../App";
 import { Navigate } from "react-router-dom";
 import "./Home.css";
 
-export default function Home({ name, loggedin, setLoggedin }) {
+export default function Home({ setLoggedin }) {
   const [userdata, setuserdata] = useState({});
   // const [name, setName] = useState("");
+  const name = localStorage.getItem("user");
   const logoutHandler = () => {
     localStorage.removeItem("token");
     setLoggedin({ loggedin: false });
@@ -27,7 +28,7 @@ export default function Home({ name, loggedin, setLoggedin }) {
             <div className="home__header__userimage">
               <img src="https://lh3.googleusercontent.com/ogw/ADea4I7Jg1mUhjHMgDuy34nUCvmABKEPG3wOr4p2SzlOsg=s32-c-mo"></img>
             </div>
-            <h1>{loggedin.name}</h1>
+            <h1>{name}</h1>
           </div>
         </header>
         <nav className="home__navbar">

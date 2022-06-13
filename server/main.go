@@ -126,7 +126,12 @@ func VerifyToken(tokenString string) (email string, err error) {
 		json.NewEncoder(w).Encode("Wrong password")
 	}else{
 		token,_:=CreateJWT(user.Email)
-	json.NewEncoder(w).Encode(token)
+	type response struct{
+		Token	string
+		Name string
+	}
+	res :=	response{token,result.Name}
+	json.NewEncoder(w).Encode(res)
 	}
 }
 }
@@ -190,17 +195,23 @@ func getproducts(w http.ResponseWriter, r *http.Request){
 
 // addProduct route
 
+
+
 func addproduct(w http.ResponseWriter , r *http.Request){
 enableCors(&w)
+token :=	r.Header.Get("Authorization")
+tokenString := strings.Split(token," ")[1]
+email,_	:= VerifyToken(tokenString)
 w.Header().Set("Content-Type", "application/json")
 var prod product
+prod.User=email
 json.NewDecoder(r.Body).Decode(&prod)
 fmt.Print(prod)
-cur , err := productCollection.InsertOne(context.TODO(),prod)
+_ , err := productCollection.InsertOne(context.TODO(),prod)
 if err!=nil{
 	json.NewEncoder(w).Encode("Unknown Error")
 }else{
-json.NewEncoder(w).Encode(cur.InsertedID)
+json.NewEncoder(w).Encode(prod)
 }
 }
 

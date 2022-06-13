@@ -14,19 +14,20 @@ export default function Add() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(name, price, description);
-    fetch("https://borderfreserver.herokuapp.com/addproduct", {
+    fetch("http://localhost:8000/addproduct", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        user: loggedin.email,
         name: name,
         price: price,
         description: description,
       }),
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
     navigate("/products");
   };
 

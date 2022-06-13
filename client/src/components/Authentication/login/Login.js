@@ -24,11 +24,13 @@ export default function Login() {
     })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log(data);
         if (data == "User not found" || data == "Wrong password") {
           alert(data);
         } else {
           setLoggedin({ loggedin: true });
-          localStorage.setItem("token", data);
+          localStorage.setItem("token", data.Token);
+          localStorage.setItem("user", data.Name);
           navigate("/products");
         }
       });
