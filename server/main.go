@@ -158,13 +158,7 @@ func forgetpassword(w http.ResponseWriter, r *http.Request){
 	}
 }
 
-func test(w http.ResponseWriter, r *http.Request){
-	enableCors(&w)
-	token :=	r.Header.Get("Authorization")
-	tokenstring := strings.Split(token," ")[1]
-	email,_ :=	VerifyToken(tokenstring)
-	json.NewEncoder(w).Encode(email)
-}
+
 // getallproducts route
 
 func getproducts(w http.ResponseWriter, r *http.Request){
@@ -265,7 +259,6 @@ func main() {
 	r := mux.NewRouter()
 		r.HandleFunc("/", login).Methods("POST")
 	r.HandleFunc("/signup",	signup).Methods("POST")
-	r.HandleFunc("/test",test).Methods("GET")
 	r.HandleFunc("/forgetpassword",forgetpassword).Methods("POST")
 	r.HandleFunc("/products", getproducts).Methods("GET")
 	r.HandleFunc("/getoneproducts/{id}", getoneproducts).Methods("GET")
