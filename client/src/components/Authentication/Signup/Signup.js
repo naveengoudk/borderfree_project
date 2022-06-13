@@ -10,7 +10,7 @@ export default function Signup() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    fetch("https://borderfreserver.herokuapp.com/signup", {
+    fetch("http://localhost:8000/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -10,6 +10,7 @@ export default function Add() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const token = localStorage.getItem("token");
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -29,7 +30,7 @@ export default function Add() {
     navigate("/products");
   };
 
-  if (loggedin.loggedin) {
+  if (token) {
     return (
       <>
         <Home loggedin={loggedin} setLoggedin={setLoggedin} />

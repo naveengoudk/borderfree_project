@@ -10,7 +10,7 @@ export default function Summary({ isVisible, handleUpdate, id }) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    fetch(`https://borderfreserver.herokuapp.com/updateproduct/${id}`, {
+    fetch(`http://localhost:8000/updateproduct/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

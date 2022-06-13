@@ -8,6 +8,7 @@ export default function Home({ name, loggedin, setLoggedin }) {
   const [userdata, setuserdata] = useState({});
   // const [name, setName] = useState("");
   const logoutHandler = () => {
+    localStorage.removeItem("token");
     setLoggedin({ loggedin: false });
   };
   return (

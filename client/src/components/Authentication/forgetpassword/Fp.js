@@ -9,7 +9,7 @@ export default function Fp() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    fetch("https://borderfreserver.herokuapp.com/forgetpassword", {
+    fetch("http://localhost:8000/forgetpassword", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

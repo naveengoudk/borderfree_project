@@ -11,6 +11,7 @@ export default function Singleproduct() {
   const [popup, setPopup] = useState(false);
   const [product, setProduct] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const id = useParams();
 
@@ -23,12 +24,12 @@ export default function Singleproduct() {
   };
 
   useEffect(() => {
-    fetch(`https://borderfreserver.herokuapp.com/getoneproducts/${id.id}`)
+    fetch(`http://localhost:8000/getoneproducts/${id.id}`)
       .then((resp) => resp.json())
       .then((data) => setProduct(data));
   }, []);
 
-  if (loggedin.loggedin) {
+  if (token) {
     return (
       <>
         <Home loggedin={loggedin} setLoggedin={setLoggedin} />

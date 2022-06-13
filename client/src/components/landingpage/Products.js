@@ -6,16 +6,22 @@ import { store } from "../../App";
 
 export default function Products() {
   const [loggedin, setLoggedin] = useContext(store);
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const userEmail = loggedin.email;
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch(`https://borderfreserver.herokuapp.com/getproducts/${userEmail}`)
+    fetch(`http://localhost:8000/products`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((resp) => resp.json())
       .then((data) => setProducts(data));
   }, []);
 
-  if (loggedin.loggedin) {
+  if (token) {
     return (
       <>
         <Home loggedin={loggedin} setLoggedin={setLoggedin} />

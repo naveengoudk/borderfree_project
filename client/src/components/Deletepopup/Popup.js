@@ -6,7 +6,7 @@ export default function Popup({ popup, setPopup, id }) {
   const navigate = useNavigate();
 
   const deleteOrder = () => {
-    fetch(`https://borderfreserver.herokuapp.com/deleteproduct/${id}`, {
+    fetch(`http://localhost:8000/deleteproduct/${id}`, {
       method: "DELETE",
     });
 

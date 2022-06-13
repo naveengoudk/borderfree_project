@@ -12,7 +12,7 @@ export default function Login() {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    fetch("https://borderfreserver.herokuapp.com/", {
+    fetch("http://localhost:8000/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,11 +24,11 @@ export default function Login() {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        if (data === "User not found" || data === "Wrong password") {
+        if (data == "User not found" || data == "Wrong password") {
           alert(data);
         } else {
-          alert("Login Successful");
-          setLoggedin({ loggedin: true, ...data });
+          setLoggedin({ loggedin: true });
+          localStorage.setItem("token", data);
           navigate("/products");
         }
       });

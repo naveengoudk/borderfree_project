@@ -7,7 +7,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
@@ -71,6 +74,43 @@ func signup(w http.ResponseWriter , r *http.Request){
 		json.NewEncoder(w).Encode("User already exists with this email")
 	}}
 
+	var jwtSecretKey = []byte("secret-key")
+	type Claims struct {
+    Email string
+    jwt.StandardClaims
+}
+// create JWT
+func CreateJWT(email string) (response string, err error) {
+    expirationTime := time.Now().Add(1 * time.Hour)
+    claims := &Claims{
+        Email: email,
+        StandardClaims: jwt.StandardClaims{
+            ExpiresAt: expirationTime.Unix(),
+        },
+    }
+
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    tokenString, err := token.SignedString(jwtSecretKey)
+    if err == nil {
+        return tokenString, nil
+    }
+    return "", err
+}
+
+// VerifyToken func will used to Verify the JWT Token while using APIS
+func VerifyToken(tokenString string) (email string, err error) {
+    claims := &Claims{}
+
+    token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+        return jwtSecretKey, nil
+    })
+
+    if token != nil {
+        return claims.Email, nil
+    }
+    return "", err
+}
+
 	// login route
 	func login(w http.ResponseWriter , r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
@@ -85,7 +125,8 @@ func signup(w http.ResponseWriter , r *http.Request){
 	if err != nil{
 		json.NewEncoder(w).Encode("Wrong password")
 	}else{
-	json.NewEncoder(w).Encode(result)
+		token,_:=CreateJWT(user.Email)
+	json.NewEncoder(w).Encode(token)
 	}
 }
 }
@@ -116,16 +157,27 @@ func forgetpassword(w http.ResponseWriter, r *http.Request){
 	}
 	}
 }
+
+func test(w http.ResponseWriter, r *http.Request){
+	enableCors(&w)
+	token :=	r.Header.Get("Authorization")
+	tokenstring := strings.Split(token," ")[1]
+	email,_ :=	VerifyToken(tokenstring)
+	json.NewEncoder(w).Encode(email)
+}
 // getallproducts route
 
 func getproducts(w http.ResponseWriter, r *http.Request){
 	enableCors(&w)
+	token := r.Header.Get("Authorization")
+	tokenString := strings.Split(token," ")[1]
+	email,_	:= VerifyToken(tokenString)
 	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	user :=  params["user"]
-	fmt.Print(user)
+	// params := mux.Vars(r)
+	// user :=  params["user"]
+	// fmt.Print(user)
 	var products []primitive.M
-	cur , err := productCollection.Find(context.TODO(),bson.D{{"user",user}})
+	cur , err := productCollection.Find(context.TODO(),bson.D{{"user",email}})
 	if err != nil {
 		json.NewEncoder(w).Encode("No products found")
 	}
@@ -213,8 +265,9 @@ func main() {
 	r := mux.NewRouter()
 		r.HandleFunc("/", login).Methods("POST")
 	r.HandleFunc("/signup",	signup).Methods("POST")
+	r.HandleFunc("/test",test).Methods("GET")
 	r.HandleFunc("/forgetpassword",forgetpassword).Methods("POST")
-	r.HandleFunc("/getproducts/{user}", getproducts).Methods("GET")
+	r.HandleFunc("/products", getproducts).Methods("GET")
 	r.HandleFunc("/getoneproducts/{id}", getoneproducts).Methods("GET")
 	r.HandleFunc("/updateproduct/{id}", updateproduct).Methods("PUT")
 	r.HandleFunc("/addproduct", addproduct).Methods("POST")

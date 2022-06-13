@@ -12,7 +12,7 @@ import Singleproduct from "./components/Singleproduct/Singleproduct";
 export const store = createContext();
 
 function App() {
-  const [loggedin, setLoggedin] = useState({ loggedin: false });
+  const [loggedin, setLoggedin] = useState({ loggedin: false, token: "" });
   return (
     <div className="App">
       <store.Provider value={[loggedin, setLoggedin]}>
