@@ -9,6 +9,7 @@ export default function Add() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const token = localStorage.getItem("token");
 
@@ -22,6 +23,7 @@ export default function Add() {
       },
       body: JSON.stringify({
         name: name,
+        image: image,
         price: price,
         description: description,
       }),
@@ -38,6 +40,14 @@ export default function Add() {
         <div className="Add__container">
           <div className="form__container">
             <form onSubmit={submitHandler}>
+              <input
+                onChange={(e) => {
+                  setImage(e.target.value);
+                }}
+                name="image"
+                type={"text"}
+                placeholder="Image url"
+              ></input>
               <label for="name">Name</label>
               <input
                 onChange={(e) => {

@@ -35,7 +35,7 @@ export default function Singleproduct() {
         <Home loggedin={loggedin} setLoggedin={setLoggedin} />
         <div className="Singleproduct__container">
           <div className="Singleproduct__imgcontainer">
-            <img src="/images/img2.webp"></img>
+            <img src={product.image}></img>
           </div>
           <div className="Singleproduct__detailscontainer">
             <div>

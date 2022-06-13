@@ -42,6 +42,7 @@ func db() *mongo.Client{
 // product model
 type product struct{
 	User   string `json:"user"`
+	Image string `json:"image"`
 	Name 	 string `json:"name"`
 	Price  string `json:"price"`
 	Description string `json:"description"`

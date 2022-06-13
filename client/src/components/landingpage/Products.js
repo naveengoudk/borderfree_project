@@ -37,7 +37,7 @@ export default function Products() {
                 >
                   <div className="container">
                     <div className="image__container">
-                      <img src="images/img2.webp"></img>
+                      <img src={product.image}></img>
                     </div>
                     <div className="name__container">
                       <h1>{product.name}</h1>
